@@ -30,7 +30,7 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                 .OrderBy(a => Guid.NewGuid()) // ahora sí puedes usar Guid.NewGuid()
                 .ToList();
 
-            
+
             return apiKeys;
         }
 
@@ -119,7 +119,7 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
 
 
         [HttpGet]
-         public async Task<IActionResult> BuscarTrackIdLyrics(string nombreCancion)
+        public async Task<IActionResult> BuscarTrackIdLyrics(string nombreCancion)
         {
             if (string.IsNullOrWhiteSpace(nombreCancion))
                 return RedirectToAction("Lyrics");
@@ -236,7 +236,7 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
         //     // Obtener trending albums
         //     var trendingAlbums = new List<ChartItemAlbum>();
 
-            
+
         //     // Álbumes trending
         //     try
         //     {
@@ -340,9 +340,12 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
             var trendingArtists = new List<ChartItemArtis>();
             var trendingAlbums = new List<ChartItemAlbum>();
 
-            try {
-                var jsonSongs = await HacerPeticionConApiKey(apiKey => {
-                    var request = new HttpRequestMessage {
+            try
+            {
+                var jsonSongs = await HacerPeticionConApiKey(apiKey =>
+                {
+                    var request = new HttpRequestMessage
+                    {
                         Method = HttpMethod.Get,
                         RequestUri = new Uri($"https://genius-song-lyrics1.p.rapidapi.com/chart/songs/?time_period={timePeriod}&chart_genre=all&per_page=10&page=1"),
                         Headers = {
@@ -358,8 +361,10 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                     trending = result?.chart_items ?? new List<ChartItem>();
                 }
 
-                var jsonArtists = await HacerPeticionConApiKey(apiKey => {
-                    var request = new HttpRequestMessage {
+                var jsonArtists = await HacerPeticionConApiKey(apiKey =>
+                {
+                    var request = new HttpRequestMessage
+                    {
                         Method = HttpMethod.Get,
                         RequestUri = new Uri($"https://genius-song-lyrics1.p.rapidapi.com/chart/artists/?time_period={timePeriod}&per_page=11&page=1"),
                         Headers = {
@@ -375,8 +380,10 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                     trendingArtists = result?.chart_items ?? new List<ChartItemArtis>();
                 }
 
-                var jsonAlbums = await HacerPeticionConApiKey(apiKey => {
-                    var request = new HttpRequestMessage {
+                var jsonAlbums = await HacerPeticionConApiKey(apiKey =>
+                {
+                    var request = new HttpRequestMessage
+                    {
                         Method = HttpMethod.Get,
                         RequestUri = new Uri($"https://genius-song-lyrics1.p.rapidapi.com/chart/albums/?time_period={timePeriod}&per_page=10&page=1"),
                         Headers = {
@@ -391,7 +398,8 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                     var result = JsonSerializer.Deserialize<RootAlbum>(jsonAlbums, options);
                     trendingAlbums = result?.chart_items ?? new List<ChartItemAlbum>();
                 }
-            } catch { }
+            }
+            catch { }
 
             ViewBag.Username = username;
             return View(new MusicViewModel
@@ -428,6 +436,81 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public IActionResult TopTracksArtista()
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TopTracksArtista(string nombreArtista)
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (string.IsNullOrWhiteSpace(nombreArtista))
+            {
+                TempData["Error"] = "Debes introducir el nombre de un artista.";
+                return View();
+            }
+
+            var client = _httpClientFactory.CreateClient();
+            try
+            {
+                // 1. Buscar artista y obtener su ID
+                var searchUri = $"https://spotify-data.p.rapidapi.com/search/?q={Uri.EscapeDataString(nombreArtista)}&type=artists&offset=0&limit=10&numberOfTopResults=5";
+                var artistRequest = new HttpRequestMessage(HttpMethod.Get, searchUri);
+                artistRequest.Headers.Add("x-rapidapi-key", "a11e225cfcmshbeb971c96df2104p1c3a55jsn35bc5e95777f");
+                artistRequest.Headers.Add("x-rapidapi-host", "spotify-data.p.rapidapi.com");
+
+                var artistResponse = await client.SendAsync(artistRequest);
+                artistResponse.EnsureSuccessStatusCode();
+                var artistJson = await artistResponse.Content.ReadAsStringAsync();
+                var artistData = JsonSerializer.Deserialize<RootArtistInfo>(artistJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                var artistUri = artistData?.artists?.items?.FirstOrDefault()?.data?.uri;
+                if (string.IsNullOrEmpty(artistUri))
+                {
+                    TempData["Error"] = "Artista no encontrado.";
+                    return View();
+                }
+
+                var artistId = artistUri.Split(':').Last();
+
+                // 2. Obtener top tracks
+                var topTracksUri = $"https://spotify-downloader9.p.rapidapi.com/artistTopTracks?id={artistId}&country=US";
+                var tracksRequest = new HttpRequestMessage(HttpMethod.Get, topTracksUri);
+                tracksRequest.Headers.Add("x-rapidapi-key", "d04ce47e97mshcd5e0839cc5f49ap1d09d1jsn5e6dc5f8101d");
+                tracksRequest.Headers.Add("x-rapidapi-host", "spotify-downloader9.p.rapidapi.com");
+
+                var tracksResponse = await client.SendAsync(tracksRequest);
+                tracksResponse.EnsureSuccessStatusCode();
+                var tracksJson = await tracksResponse.Content.ReadAsStringAsync();
+                var topTracks = JsonSerializer.Deserialize<PRJ_FINAL_MP09_MP03.Models.TopTracks.Root>(tracksJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                return View(topTracks.data.tracks);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Ocurrió un error: {ex.Message}";
+                return View();
+            }
+        }
+
+
+        
+
+
 
 
 

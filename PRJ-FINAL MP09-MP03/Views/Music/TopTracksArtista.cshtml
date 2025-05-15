@@ -1,0 +1,321 @@
+@model List<PRJ_FINAL_MP09_MP03.Models.TopTracks.Track>
+
+
+@{
+    Layout = null;
+}    
+@{
+    ViewData["Title"] = "Top Tracks del Artista";
+}
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard Musical</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Estilo personalizado -->
+    <link href="~/css/Track.css" rel="stylesheet" />
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" asp-controller="Music" asp-action="Dashboard">🎶 MusicApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Trending">Trending</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Playlist">Playlist</a>
+        </li>
+
+        <li class="nav-item"></li>
+          <a class="nav-link" asp-controller="Music" asp-action="Lyrics">Lyrics</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Account" asp-action="Profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">Sign Out</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Fondo y gradientes -->
+  <div class="gradient-bg">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
+    <div class="gradients-container">
+      <div class="g1"></div>
+      <div class="g2"></div>
+      <div class="g3"></div>
+      <div class="g4"></div>
+      <div class="g5"></div>
+      <div class="interactive"></div>
+    </div>
+  </div>
+
+<div class="container mt-5">
+    <h2 class="text-center">Top Tracks de Artista</h2>
+
+    <form method="post" class="mt-4 d-flex justify-content-center">
+        <input type="text" name="nombreArtista" class="form-control w-50 me-2" placeholder="Nombre del artista..." required />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center mt-3">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div id="defaultTracks" class="row mt-4">
+        <!-- Aquí se mostrarán los tracks iniciales por JS -->
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row mt-4">
+            @foreach (var track in Model)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow">
+                        <img src="@track.album.images.FirstOrDefault()?.url" class="card-img-top" alt="@track.name" />
+                        <div class="card-body">
+                            <h5 class="card-title">@track.name</h5>
+                            <p class="card-text"><strong>Álbum:</strong> @track.album.name</p>
+                            <p class="card-text"><strong>Artista:</strong> @track.artists.FirstOrDefault()?.name</p>
+                            <p class="card-text"><strong>ID del track:</strong> @track.id</p>
+                            <a href="@track.external_urls.spotify" class="btn btn-success" target="_blank">Ver en Spotify</a>
+                            <button class="btn btn-warning mt-2" onclick="toggleAudioPlayer('@track.id', this)">Descargar y Escuchar</button>
+                            
+                            <!-- Contenedor para los controles de audio (inicialmente oculto) -->
+                            <div id="audio-controls-@track.id" class="mt-3" style="display: none;">
+                                <audio id="audio-player-@track.id" controls class="w-100 mb-2"></audio>
+                                <a id="download-link-@track.id" href="#" download class="btn btn-success w-100">
+                                    <i class="fas fa-download"></i> Descargar Canción
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div id="downloadResult" class="mt-5"></div>
+</div>
+<script>
+        const container = document.getElementById("defaultTracks");
+        const artistIds = [
+            "7dGJo4pcD2V6oG8kP0tJRR", // Eminem
+            "06HL4z0CvFAxyc27GXpf02", // Taylor Swift
+            "1Xyo4u8uXC1ZmMpatF05PJ"  // The Weeknd
+        ];
+
+        const headers = {
+            "x-rapidapi-key": "3d2ee5a167msh43208189619a76ep1a08a7jsn7a5ba332ca3d",
+            "x-rapidapi-host": "spotify-downloader9.p.rapidapi.com"
+        };
+
+        const fetchTopTracks = async (id) => {
+            const url = `https://spotify-downloader9.p.rapidapi.com/artistTopTracks?id=${id}&country=US`;
+            const response = await fetch(url, { headers });
+            const data = await response.json();
+            return data.data.tracks;
+        };
+
+        const renderTrack = (track) => {
+            return `
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow">
+                        <img src="${track.album.images[0]?.url}" class="card-img-top" alt="${track.name}" />
+                        <div class="card-body">
+                            <h5 class="card-title">${track.name}</h5>
+                            <p class="card-text"><strong>Álbum:</strong> ${track.album.name}</p>
+                            <p class="card-text"><strong>Artista:</strong> ${track.artists[0]?.name}</p>
+                            <p class="card-text"><strong>ID del track:</strong> ${track.id}</p>
+                            <a href="${track.external_urls.spotify}" class="btn btn-success" target="_blank">Ver en Spotify</a>
+                            <button class="btn btn-warning mt-2" onclick="toggleAudioPlayer('${track.id}', this)">Descargar y Escuchar</button>
+                            
+                            <!-- Contenedor para los controles de audio (inicialmente oculto) -->
+                            <div id="audio-controls-${track.id}" class="mt-3" style="display: none;">
+                                <audio id="audio-player-${track.id}" controls class="w-100 mb-2"></audio>
+                                <a id="download-link-${track.id}" href="#" download class="btn btn-success w-100">
+                                    <i class="fas fa-download"></i> Descargar Canción
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        window.currentTrackList = [];
+
+        const loadAllTracks = async () => {
+            for (const id of artistIds) {
+                const tracks = await fetchTopTracks(id);
+                tracks.slice(0, 3).forEach(track => {
+                    window.currentTrackList.push(track);
+                    container.innerHTML += renderTrack(track);
+                });
+            }
+        };
+
+        @if (Model == null || !Model.Any())
+        {
+            <text>loadAllTracks();</text>
+        }
+
+        async function getUrlDescarga(TrackNombre){
+            const youtubeOptions = {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': '1be3b83263mshe01b6c573d0a359p13a9d9jsna235ceb4503e',
+                        'x-rapidapi-host': 'youtube138.p.rapidapi.com'
+                    }
+            };
+
+            const youtubeMp3Options = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': 'dc525329bamsh0b623e65b4038b1p190f13jsn50573c294351',
+                    'x-rapidapi-host': 'youtube-mp36.p.rapidapi.com'
+                }
+            };
+
+            const YoutubeVideoId = `https://youtube138.p.rapidapi.com/search/?q=${encodeURIComponent(TrackNombre)}&hl=en&gl=ES`;
+            const youtubeResponse = await fetch(YoutubeVideoId, youtubeOptions);
+            const youtubeResult = await youtubeResponse.json();
+            const videoId = youtubeResult.contents?.[0]?.video?.videoId;
+            const YoutubeMp3Url = `https://youtube-mp36.p.rapidapi.com/dl?id=${videoId}`;
+            const youtubeResponseMp3 = await fetch(YoutubeMp3Url, youtubeMp3Options);
+            const youtubeResultMp3 = await youtubeResponseMp3.json();
+            const mp3UrlMp3Descarga = youtubeResultMp3.link;
+
+            const resultado = {
+                UrlDescarga: mp3UrlMp3Descarga,
+                Title: TrackNombre
+            }
+
+            return resultado;
+    }
+
+    async function getUrlMuica(trackId) {
+        const encodedTrackUrl = encodeURIComponent(`https://open.spotify.com/track/${trackId}`);
+        const downloaderApiUrl = `https://spotify-downloader9.p.rapidapi.com/downloadSong?songId=${encodedTrackUrl}`;
+
+        const downloaderOptions = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': 'a11e225cfcmshbeb971c96df2104p1c3a55jsn35bc5e95777f',
+                    'x-rapidapi-host': 'spotify-downloader9.p.rapidapi.com'
+                }
+        };
+        const resultado = {
+            UrlMusica: "",
+            Title: "",
+            UrlDescarga: "",
+        }
+        try {
+            // Obtener el MP3
+            const DownloadResponse = await fetch(downloaderApiUrl, downloaderOptions);
+            const DownloadResult = await DownloadResponse.json();
+
+            if (!DownloadResult.success || !DownloadResult.data?.downloadLink) {
+                throw new Error("No se pudo obtener el MP3 desde la nueva API.");
+            }
+
+            const mp3Url = DownloadResult.data.downloadLink;
+
+            resultado.UrlMusica = mp3Url;
+            resultado.Title = DownloadResult.data.title;
+            const mp3UrlDescarga = await getUrlDescarga(resultado.Title);
+            resultado.UrlDescarga = mp3UrlDescarga.UrlDescarga;
+
+            return resultado;
+        } catch (error) {
+            console.error("Error al obtener el MP3:", error); 
+            throw error;
+        }
+    }
+
+    // Función para mostrar/ocultar el reproductor en la misma card
+    async function toggleAudioPlayer(trackId, buttonElement) {
+        const audioControls = document.getElementById(`audio-controls-${trackId}`);
+        const audioPlayer = document.getElementById(`audio-player-${trackId}`);
+        const downloadLink = document.getElementById(`download-link-${trackId}`);
+        
+        // Si ya está visible, solo lo ocultamos
+        if (audioControls.style.display === 'block') {
+            audioControls.style.display = 'none';
+            audioPlayer.pause();
+            buttonElement.textContent = 'Descargar y Escuchar';
+            return;
+        }
+        
+        // Mostrar mensaje de carga
+        buttonElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
+        
+        try {
+            // Obtener los datos de la canción
+            const trackData = await getUrlMuica(trackId);
+            
+            // Configurar el reproductor de audio
+            audioPlayer.src = trackData.UrlMusica;
+            downloadLink.href = trackData.UrlDescarga;
+            downloadLink.download = `${trackData.Title}.mp3`;
+            
+            // Mostrar controles
+            audioControls.style.display = 'block';
+            buttonElement.textContent = 'Ocultar Reproductor';
+            
+            // Reproducir automáticamente (opcional)
+            audioPlayer.play().catch(e => console.log("Autoplay prevented:", e));
+        } catch (error) {
+            console.error("Error al cargar la canción:", error);
+            buttonElement.textContent = 'Error - Intentar de nuevo';
+            
+            // Mostrar mensaje de error en la card
+            const errorElement = document.createElement('div');
+            errorElement.className = 'alert alert-danger mt-2';
+            errorElement.textContent = 'Error al cargar la canción. Intenta de nuevo.';
+            audioControls.innerHTML = '';
+            audioControls.appendChild(errorElement);
+            audioControls.style.display = 'block';
+        }
+    }
+    </script>
+</body>
+</html>

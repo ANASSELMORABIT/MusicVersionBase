@@ -46,6 +46,9 @@
         <li class="nav-item"></li>
           <a class="nav-link" asp-controller="Music" asp-action="Lyrics">Lyrics</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Music" asp-action="TopTracksArtista">Top Tracks</a>
+        </li>
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -96,12 +99,6 @@
 
     @if (TempData["TrackId"] != null)
     {
-        @* <script>
-            const trackId = '@TempData["TrackId"]';
-
-            
-            getTrackUrlFromApi(trackId);
-        </script> *@
 
          <div class="alert alert-success text-center mt-4">
             
@@ -147,116 +144,6 @@
             No se encontraron recomendaciones musicales.
         </div>
     }
-@* 
-    <hr class="my-5"/>
-    @{
-        var selectedPeriod = Context.Request.Query["timePeriod"].FirstOrDefault() ?? "week";
-    }
-
-    <form method="get" asp-controller="Music" asp-action="Dashboard" class="text-center my-4">
-        <label for="timePeriod">Filtrar por período:</label>
-        <select name="timePeriod" id="timePeriod" class="form-select d-inline-block w-auto mx-2">
-            <option value="day" selected="@(selectedPeriod == "day")">Día</option>
-            <option value="week" selected="@(selectedPeriod == "week")">Semana</option>
-            <option value="month" selected="@(selectedPeriod == "month")">Mes</option>
-        </select>
-        <button type="submit" class="btn btn-secondary">Actualizar</button>
-    </form>
-
-    <h2 class="text-center">🔥 Canciones en Tendencia</h2>
-
-    @if (Model.Trending != null && Model.Trending.Any())
-    {
-        <div class="container mt-4">
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                @foreach (var item in Model.Trending)
-                {
-                    var song = item.item;
-                    <div class="col">
-                        <div class="card h-100 shadow-sm">
-                            <img src="@song.song_art_image_url" class="card-img-top" alt="Imagen de @song.title">
-                            <div class="card-body">
-                                <h5 class="card-title">@song.title</h5>
-                                <p class="card-text"><strong>Artista:</strong> @song.artist_names</p>
-                                <a href="@song.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-info text-center mt-4">
-            No se encontraron canciones en tendencia.
-        </div>
-    }
-
-
-    <h2 class="text-center mt-5">🎤 Artistas en Tendencia</h2>
-
-    @if (Model.TrendingArtists != null && Model.TrendingArtists.Any())
-    {
-        <div class="container mt-4">
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    @foreach (var item in Model.TrendingArtists)
-                    {
-                        var Artist = item.item;
-                        <div class="col">
-                            <div class="card h-100 shadow-sm">
-                                <img src="@Artist.image_url" class="card-img-top" alt="Imagen de @Artist.name">
-                                <div class="card-body">
-                                    <h5 class="card-title">@Artist.name</h5>
-                                    <p class="card-text"><strong>Artista:</strong> @Artist.name</p>
-                                    <a href="@Artist.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-        </div>
-
-        
-    }
-    else
-    {
-        <div class="alert alert-info text-center mt-4">
-            No se encontraron artistas en tendencia.
-        </div>
-    }
-
-
-<h2 class="text-center mt-5">📀 Álbumes en Tendencia</h2>
-
-@if (Model.TrendingAlbums != null && Model.TrendingAlbums.Any())
-{
-    <div class="container mt-4">
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    @foreach (var item in Model.TrendingAlbums)
-                    {
-                        var song = item.item;
-                        <div class="col">
-                            <div class="card h-100 shadow-sm">
-                                <img src="@song.cover_art_url" class="card-img-top" alt="Imagen de @song.full_title">
-                                <div class="card-body">
-                                    <h5 class="card-title">@song.full_title</h5>
-                                    <p class="card-text"><strong>Artista:</strong> @song.primary_artist_names</p>
-                                    <a href="@song.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-        </div>
-    
-}
-else
-{
-    <div class="alert alert-info text-center mt-4">
-        No se encontraron álbumes en tendencia.
-    </div>
-} *@
 
 
     
@@ -265,22 +152,24 @@ else
 
 <script>
 async function getTrackUrlFromApi(trackId) {
-    const spotifyMp3ApiUrl = `https://spotify-music-mp3-downloader-api.p.rapidapi.com/download?link=https%3A%2F%2Fopen.spotify.com%2Ftrack%2F${trackId}`;
+    
     const spotifyDataApiUrl = `https://spotify-data.p.rapidapi.com/tracks/?ids=${trackId}`;
+    const encodedTrackUrl = encodeURIComponent(`https://open.spotify.com/track/${trackId}`);
+    const downloaderApiUrl = `https://spotify-downloader9.p.rapidapi.com/downloadSong?songId=${encodedTrackUrl}`;
 
 
-    const mp3Options = {
+     const downloaderOptions = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': 'ef26a00f67msh88ef9454dd8eb45p183055jsndc546b76893b',
-            'x-rapidapi-host': 'spotify-music-mp3-downloader-api.p.rapidapi.com'
+            'x-rapidapi-key': 'a11e225cfcmshbeb971c96df2104p1c3a55jsn35bc5e95777f', // Reemplaza con tu clave válida
+            'x-rapidapi-host': 'spotify-downloader9.p.rapidapi.com'
         }
     };
 
     const dataOptions = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': 'e021de509fmsh80d2026e169e54cp1f1c70jsnaa85f4037fb7',
+            'x-rapidapi-key': 'a11e225cfcmshbeb971c96df2104p1c3a55jsn35bc5e95777f',
             'x-rapidapi-host': 'spotify-data.p.rapidapi.com'
         }
     };
@@ -288,7 +177,7 @@ async function getTrackUrlFromApi(trackId) {
     const youtubeOptions = {
             method: 'GET',
             headers: {
-                'x-rapidapi-key': '1eafb2f804mshbca184d703c45e8p14cfbejsn879e1a0dd073',
+                'x-rapidapi-key': 'a11e225cfcmshbeb971c96df2104p1c3a55jsn35bc5e95777f',
                 'x-rapidapi-host': 'youtube138.p.rapidapi.com'
             }
     };
@@ -296,22 +185,23 @@ async function getTrackUrlFromApi(trackId) {
     const youtubeMp3Options = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': '7e97041cc6msh18d9432dfea7095p1d16e1jsna77fb7101106',
+            'x-rapidapi-key': 'dc525329bamsh0b623e65b4038b1p190f13jsn50573c294351',
             'x-rapidapi-host': 'youtube-mp36.p.rapidapi.com'
         }
     };
     try {
         // Obtener el MP3
-        const mp3Response = await fetch(spotifyMp3ApiUrl, mp3Options);
-        const mp3Result = await mp3Response.json();
+        const DownloadResponse = await fetch(downloaderApiUrl, downloaderOptions);
+        const DownloadResult = await DownloadResponse.json();
 
-        if (!mp3Result.success || !mp3Result.data?.medias?.length) {
-            throw new Error("No se pudo obtener el MP3 desde Spotify.");
+
+          if (!DownloadResult.success || !DownloadResult.data?.downloadLink) {
+            throw new Error("No se pudo obtener el MP3 desde la nueva API.");
         }
 
-        const media = mp3Result.data.medias[0];
-        const mp3Url = media.url;
-        const fallbackTitle = mp3Result.data.title;
+        
+        const mp3Url = DownloadResult.data.downloadLink;
+        const fallbackTitle = DownloadResult.data.title;
 
         // Obtener los detalles de la canción
         const dataResponse = await fetch(spotifyDataApiUrl, dataOptions);
