@@ -82,7 +82,7 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                     RequestUri = new Uri($"https://spotify-scraper.p.rapidapi.com/v1/track/search?name={encodedName}"),
                     Headers =
                     {
-                        { "x-rapidapi-key", "03bcc8278amshf34089036b951c4p1bcc4cjsn111aaee3674d" },
+                        { "x-rapidapi-key", "86a7bf4e34mshaf5f880211c2826p15185djsnd747916cda85" },
                         { "x-rapidapi-host", "spotify-scraper.p.rapidapi.com" },
                     }
                 };
@@ -470,7 +470,7 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                 // 1. Buscar artista y obtener su ID
                 var searchUri = $"https://spotify-data.p.rapidapi.com/search/?q={Uri.EscapeDataString(nombreArtista)}&type=artists&offset=0&limit=10&numberOfTopResults=5";
                 var artistRequest = new HttpRequestMessage(HttpMethod.Get, searchUri);
-                artistRequest.Headers.Add("x-rapidapi-key", "a11e225cfcmshbeb971c96df2104p1c3a55jsn35bc5e95777f");
+                artistRequest.Headers.Add("x-rapidapi-key", "0f241b01a0mshc94f0461604b45cp19f633jsn0f0b8d225e7a");
                 artistRequest.Headers.Add("x-rapidapi-host", "spotify-data.p.rapidapi.com");
 
                 var artistResponse = await client.SendAsync(artistRequest);
@@ -490,7 +490,7 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                 // 2. Obtener top tracks
                 var topTracksUri = $"https://spotify-downloader9.p.rapidapi.com/artistTopTracks?id={artistId}&country=US";
                 var tracksRequest = new HttpRequestMessage(HttpMethod.Get, topTracksUri);
-                tracksRequest.Headers.Add("x-rapidapi-key", "d04ce47e97mshcd5e0839cc5f49ap1d09d1jsn5e6dc5f8101d");
+                tracksRequest.Headers.Add("x-rapidapi-key", "96bb08b856mshb13c721600c4091p1ba0e9jsn028e0f356aa6");
                 tracksRequest.Headers.Add("x-rapidapi-host", "spotify-downloader9.p.rapidapi.com");
 
                 var tracksResponse = await client.SendAsync(tracksRequest);

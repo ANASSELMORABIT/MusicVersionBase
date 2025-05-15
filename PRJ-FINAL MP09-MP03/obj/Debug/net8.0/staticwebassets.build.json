@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "XGhT5ViJjYCe60ikA+RfOpTL97gNlt5lovo8aCTjvo0=",
+  "Hash": "2haN7BDAcw6Hc3+bmUU4wiHkDwk/AjMmrX7TYjNxWlk=",
   "Source": "PRJ-FINAL MP09-MP03",
   "BasePath": "_content/PRJ-FINAL MP09-MP03",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\login.css"
+    },
+    {
+      "Identity": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\profile.css",
+      "SourceId": "PRJ-FINAL MP09-MP03",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\",
+      "BasePath": "_content/PRJ-FINAL MP09-MP03",
+      "RelativePath": "css/profile.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\profile.css"
     },
     {
       "Identity": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\site.css",
@@ -186,6 +205,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\particles-config.js"
+    },
+    {
+      "Identity": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\Profile.js",
+      "SourceId": "PRJ-FINAL MP09-MP03",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\",
+      "BasePath": "_content/PRJ-FINAL MP09-MP03",
+      "RelativePath": "js/Profile.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\Profile.js"
     },
     {
       "Identity": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\site.js",

@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.profile-card {
+    position: relative;
+    background: rgba(30, 30, 60, 0.9);
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+    animation: slideUp 1.2s ease-out forwards;
+    overflow: hidden;
+}
+
+.glow-border {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #00f0ff, #8a2be2, #00ffb8, #facc15);
+    background-size: 400% 400%;
+    z-index: 0;
+    filter: blur(10px);
+    animation: borderGlow 10s linear infinite;
+    border-radius: 25px;
+}
+
+.profile-content {
+    position: relative;
+    z-index: 1;
+}
+
+.profile-title {
+    font-size: 2.3rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #00ffd5;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+    animation: pulse 2s infinite;
+}
+
+.info-group p {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.info-group p:hover {
+    transform: scale(1.03);
+    color: #00ffd5;
+}
+
+.btn-glow {
+    background: linear-gradient(90deg, #00ffd5, #8a2be2);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    font-weight: bold;
+    border-radius: 50px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 10px #00ffd5;
+    text-decoration: none;
+}
+
+.btn-glow:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #00ffd5, 0 0 30px #8a2be2;
+}
+
+/* Animaciones */
+@keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { text-shadow: 0 0 10px #00ffd5; }
+    50% { text-shadow: 0 0 20px #8a2be2; }
+}

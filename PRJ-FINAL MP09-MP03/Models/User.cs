@@ -2,6 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using PRJ_FINAL_MP09_MP03.Models; 
+
+namespace PRJ_FINAL_MP09_MP03.Models{
+    
 public class User
 {
     public int Id { get; set; }
@@ -25,4 +28,6 @@ public class User
     public string VerificationCode { get; set; }
 
     public List<Playlist> Playlists { get; set; }
+}
+
 }

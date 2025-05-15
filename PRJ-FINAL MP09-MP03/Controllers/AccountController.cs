@@ -274,10 +274,27 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
         }
 
 
+        [HttpGet]
         public IActionResult Profile()
         {
-            return View();
+            var username = HttpContext.Session.GetString("Username");
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            return View(user);
         }
+
+
 
 
 

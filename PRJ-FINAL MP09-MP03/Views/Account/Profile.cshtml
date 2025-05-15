@@ -1,0 +1,39 @@
+@model PRJ_FINAL_MP09_MP03.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perfil de @Model.Username</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/profile.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="glow-border"></div>
+            <div class="profile-content text-center">
+                <h2 class="profile-title">👤 Perfil de @Model.Username</h2>
+                <div class="info-group">
+                    <p><strong>📧 Email:</strong> @Model.Email</p>
+                    <p><strong>🔐 Rol:</strong> @Model.Role</p>
+                    <p><strong>🕓 Fecha de creación:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><strong>🛠️ Última actualización:</strong> @Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+
+                <a href="@Url.Action("Logout", "Account")" class="btn-glow mt-4">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/profile.js"></script>
+</body>
+</html>
