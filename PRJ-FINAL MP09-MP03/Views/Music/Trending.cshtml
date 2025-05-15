@@ -1,0 +1,103 @@
+@model PRJ_FINAL_MP09_MP03.Models.MusicViewModel
+@{
+    ViewData["Title"] = "Trending";
+    var selectedPeriod = Context.Request.Query["timePeriod"].FirstOrDefault() ?? "week";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Tendencias Musicales</h1>
+
+    <form method="get" asp-controller="Music" asp-action="Trending" class="text-center mb-5">
+        <label for="timePeriod" class="form-label">Filtrar por período:</label>
+        <select name="timePeriod" id="timePeriod" class="form-select d-inline-block w-auto mx-2">
+            <option value="day" selected="@(selectedPeriod == "day")">Día</option>
+            <option value="week" selected="@(selectedPeriod == "week")">Semana</option>
+            <option value="month" selected="@(selectedPeriod == "month")">Mes</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </form>
+
+    <!-- Canciones en Tendencia -->
+    <h2 class="text-center">🔥 Canciones en Tendencia</h2>
+    @if (Model.Trending != null && Model.Trending.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+            @foreach (var item in Model.Trending)
+            {
+                var song = item.item;
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@song.song_art_image_url" class="card-img-top" alt="Imagen de @song.title">
+                        <div class="card-body">
+                            <h5 class="card-title">@song.title</h5>
+                            <p class="card-text"><strong>Artista:</strong> @song.artist_names</p>
+                            <a href="@song.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-4">
+            No se encontraron canciones en tendencia.
+        </div>
+    }
+
+    <!-- Artistas en Tendencia -->
+    <h2 class="text-center mt-5">🎤 Artistas en Tendencia</h2>
+    @if (Model.TrendingArtists != null && Model.TrendingArtists.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+            @foreach (var item in Model.TrendingArtists)
+            {
+                var artist = item.item;
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@artist.image_url" class="card-img-top" alt="Imagen de @artist.name">
+                        <div class="card-body">
+                            <h5 class="card-title">@artist.name</h5>
+                            <p class="card-text">Popular artista en tendencia</p>
+                            <a href="@artist.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-4">
+            No se encontraron artistas en tendencia.
+        </div>
+    }
+
+    <!-- Álbumes en Tendencia -->
+    <h2 class="text-center mt-5">📀 Álbumes en Tendencia</h2>
+    @if (Model.TrendingAlbums != null && Model.TrendingAlbums.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+            @foreach (var item in Model.TrendingAlbums)
+            {
+                var album = item.item;
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@album.cover_art_url" class="card-img-top" alt="Imagen de @album.full_title">
+                        <div class="card-body">
+                            <h5 class="card-title">@album.full_title</h5>
+                            <p class="card-text"><strong>Artista:</strong> @album.primary_artist_names</p>
+                            <a href="@album.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-4">
+            No se encontraron álbumes en tendencia.
+        </div>
+    }
+</div>

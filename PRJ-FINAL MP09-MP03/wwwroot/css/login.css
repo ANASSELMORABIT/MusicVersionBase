@@ -1,0 +1,164 @@
+/* Fondo con partículas */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: #111113;
+    background-image: radial-gradient(circle at top left, #950923 10%, #111113 30%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Fondo de partículas detrás */
+.particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Contenedor del formulario */
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    z-index: 1;
+}
+/* Aplicar solo al formulario dentro de login-box */
+.login-box {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    color: #fff;
+    position: relative;
+}
+
+/* Título */
+.login-box h2 {
+    margin-bottom: 30px;
+    color: #fff;
+    text-align: center;
+}
+
+/* Inputs estilo neon */
+.login-box .form-control {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    border-radius: 0;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    box-shadow: none;
+}
+
+.login-box .form-control:focus {
+    border-bottom: 1px solid #03e9f4;
+    box-shadow: none;
+    background: transparent;
+    color: #fff;
+}
+
+/* Labels normales (puedes omitir si usas floating labels) */
+.login-box label {
+    color: #fff;
+}
+
+/* Estilo botón estilo ciberpunk */
+.login-box .btn-primary {
+    position: relative;
+    display: inline-block;
+    padding: 11px 20px;
+    background-color: #040a22;
+    color: #03e9f4;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    border: none;
+    overflow: hidden;
+    transition: 0.5s;
+}
+
+.login-box .btn-primary:hover {
+    background: #080808;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 100px #03e9f4;
+}
+
+/* Enlaces debajo del formulario */
+.login-box .btn-link {
+    color: #03e9f4;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.login-box .btn-link:hover {
+    text-shadow: 0 0 10px #5b37eb, 0 0 20px #f1307e;
+    color: #fff;
+}
+
+/* Errores de validación */
+/* Errores de validación mejorados */
+.login-box .text-danger {
+    color: #f1307e;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+    text-shadow: 0 0 5px #f1307e;
+}
+
+/* Estilo para el resumen de errores */
+.validation-summary-errors {
+    background-color: rgba(241, 48, 126, 0.1);
+    border-left: 4px solid #f1307e;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    color: #f1307e;
+    font-size: 14px;
+    border-radius: 5px;
+    text-align: left;
+    text-shadow: 0 0 5px #f1307e;
+}
+
+.user-box {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.user-box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+}
+
+.user-box label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    font-size: 16px;
+    color: #aaa;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+.user-box input:focus ~ label,
+.user-box input:not(:placeholder-shown) ~ label {
+    top: -20px;
+    font-size: 12px;
+    color: #03e9f4;
+}

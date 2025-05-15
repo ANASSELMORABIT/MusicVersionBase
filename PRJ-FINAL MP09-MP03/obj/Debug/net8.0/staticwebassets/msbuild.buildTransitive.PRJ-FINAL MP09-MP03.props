@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\PRJ-FINAL MP09-MP03.props" />
+</Project>

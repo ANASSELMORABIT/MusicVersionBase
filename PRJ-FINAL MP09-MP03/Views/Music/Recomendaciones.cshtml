@@ -1,0 +1,36 @@
+@model List<PRJ_FINAL_MP09_MP03.Models.Recommendation>
+
+@{
+    ViewData["Title"] = "Recomendaciones Musicales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center mt-4">🎵 Recomendaciones Musicales</h1>
+
+@if (Model != null && Model.Any())
+{
+    <div class="container mt-4">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var rec in Model)
+            {
+                var song = rec.recommended_song;
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@song.song_art_image_url" class="card-img-top" alt="Imagen de @song.title">
+                        <div class="card-body">
+                            <h5 class="card-title">@song.title</h5>
+                            <p class="card-text"><strong>Artista:</strong> @song.artist_names</p>
+                            <a href="@song.url" target="_blank" class="btn btn-primary">Ver en Genius</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning text-center mt-5">
+        No se encontraron recomendaciones musicales.
+    </div>
+}
