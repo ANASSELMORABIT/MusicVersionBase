@@ -34,6 +34,7 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
                 if (user != null && PasswordHelper.VerifyPassword(user.Password, model.Password))
                 {
                     HttpContext.Session.SetString("Username", user.Username);
+                    HttpContext.Session.SetInt32("UserId", user.Id); 
                     return RedirectToAction("Dashboard", "Music");
 
                 }

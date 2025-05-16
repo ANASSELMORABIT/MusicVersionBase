@@ -8,12 +8,15 @@ using System.Text.Json;
 using PRJ_FINAL_MP09_MP03.Models;
 using System.Web; // para HttpUtility.UrlEncode
 using System.Text.Json;
+using System.Security.Claims;
+
 namespace PRJ_FINAL_MP09_MP03.Controllers
 {
     public class MusicController : Controller
     {
         private readonly TodoContext _context;
         private readonly IHttpClientFactory _httpClientFactory;
+
 
         public MusicController(TodoContext context, IHttpClientFactory httpClientFactory)
         {
@@ -137,142 +140,48 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
         }
 
 
-        // [HttpGet]
-        // public async Task<IActionResult> Dashboard(string timePeriod = "week")
-        // {
-        //     var username = HttpContext.Session.GetString("Username");
-        //     if (string.IsNullOrEmpty(username))
-        //     {
-        //         return RedirectToAction("Login", "Account");
-        //     }
 
-        //     var client = _httpClientFactory.CreateClient();
-        //     var options = new JsonSerializerOptions
-        //     {
-        //         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        //         PropertyNameCaseInsensitive = true
-        //     };
+        [HttpPost]
+        public IActionResult GuardarPlaylist([FromBody] Playlist datos)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
 
-        //     // Obtener recomendaciones
-        //     var recommendations = new List<Recommendation>();
-        //     try
-        //     {
-        //         var recJson = await HacerPeticionConApiKey(apiKey =>
-        //         {
-        //             var request = new HttpRequestMessage
-        //             {
-        //                 Method = HttpMethod.Get,
-        //                 RequestUri = new Uri("https://genius-song-lyrics1.p.rapidapi.com/song/recommendations/?id=2396871"),
-        //                 Headers =
-        //                 {
-        //                     { "x-rapidapi-key", apiKey },
-        //                     { "x-rapidapi-host", "genius-song-lyrics1.p.rapidapi.com" }
-        //                 }
-        //             };
-        //             return client.SendAsync(request);
-        //         });
+            Console.WriteLine("Datos recibidos:");
+            Console.WriteLine($"Nombre Canción: {datos.NombreCancion}");
+            Console.WriteLine($"Artista: {datos.Artista}");
+            Console.WriteLine($"Descripción: {datos.Descripcion}");
+            Console.WriteLine($"URL Música: {datos.UrlMusica}");
+            Console.WriteLine($"URL Descarga: {datos.UrlDescarga}");
+            Console.WriteLine($"URL Imagen: {datos.UrlImg}");
+            Console.WriteLine($"ID Track: {datos.IdTrack}");
 
-        //         if (recJson != null)
-        //         {
-        //             var recRoot = JsonSerializer.Deserialize<Root>(recJson, options);
-        //             recommendations = recRoot?.song_recommendations?.recommendations ?? new List<Recommendation>();
-        //         }
-        //     }
-        //     catch { }
+            if (userId == null)
+            {
+                return Unauthorized(new { success = false, message = "Usuario no autenticado." });
+            }
 
-        //     // Obtener trending musicas
-        //     var trending = new List<ChartItem>();
-        //     try
-        //     {
-        //         var trendJson = await HacerPeticionConApiKey(apiKey =>
-        //         {
-        //             var request = new HttpRequestMessage
-        //             {
-        //                 Method = HttpMethod.Get,
-        //                 RequestUri = new Uri($"https://genius-song-lyrics1.p.rapidapi.com/chart/songs/?time_period={timePeriod}&chart_genre=all&per_page=10&page=1"),
-        //                 Headers =
-        //                 {
-        //                     { "x-rapidapi-key", apiKey },
-        //                     { "x-rapidapi-host", "genius-song-lyrics1.p.rapidapi.com" }
-        //                 }
-        //             };
-        //             return client.SendAsync(request);
-        //         });
+            if (string.IsNullOrWhiteSpace(datos.Descripcion))
+            {
+                datos.Descripcion = "";  // O un texto por defecto, por ejemplo "Sin descripción"
+            }
 
-        //         if (trendJson != null)
-        //         {
-        //             var trendRoot = JsonSerializer.Deserialize<RootTrending>(trendJson, options);
-        //             trending = trendRoot?.chart_items ?? new List<ChartItem>();
-        //         }
-        //     }
-        //     catch { }
-        //     // Obtener trending artists
-        //     var trendingArtists = new List<ChartItemArtis>();
-        //     try
-        //     {
-        //         var artistJson = await HacerPeticionConApiKey(apiKey =>
-        //         {
-        //             var request = new HttpRequestMessage
-        //             {
-        //                 Method = HttpMethod.Get,
-        //                 RequestUri = new Uri("https://genius-song-lyrics1.p.rapidapi.com/chart/artists/?time_period=" + timePeriod + "&per_page=11&page=1"),
-        //                 Headers =
-        //                 {
-        //                     { "x-rapidapi-key", apiKey },
-        //                     { "x-rapidapi-host", "genius-song-lyrics1.p.rapidapi.com" }
-        //                 }
-        //             };
-        //             return client.SendAsync(request);
-        //         });
+            datos.UserId = userId.Value;
+            datos.DateCreated = DateTime.Now;
 
-        //         if (artistJson != null)
-        //         {
-        //             var artistRoot = JsonSerializer.Deserialize<RootArtist>(artistJson, options);
-        //             trendingArtists = artistRoot?.chart_items ?? new List<ChartItemArtis>();
-        //         }
-        //     }
-        //     catch { }
+            try
+            {
+                _context.Playlists.Add(datos);
+                _context.SaveChanges();
 
-        //     // Obtener trending albums
-        //     var trendingAlbums = new List<ChartItemAlbum>();
+                return Ok(new { success = true, message = "Track guardado en Playlist." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = $"Error al guardar en la base de datos: {ex.Message}", detalle = ex.InnerException?.Message });
+            }
+        }
 
 
-        //     // Álbumes trending
-        //     try
-        //     {
-        //         var albumJson = await HacerPeticionConApiKey(apiKey =>
-        //         {
-        //             var request = new HttpRequestMessage
-        //             {
-        //                 Method = HttpMethod.Get,
-        //                 RequestUri = new Uri("https://genius-song-lyrics1.p.rapidapi.com/chart/albums/?time_period=" + timePeriod + "&per_page=10&page=1"),
-        //                 Headers =
-        //                 {
-        //                     { "x-rapidapi-key", apiKey },
-        //                     { "x-rapidapi-host", "genius-song-lyrics1.p.rapidapi.com" }
-        //                 }
-        //             };
-        //             return client.SendAsync(request);
-        //         });
-
-        //         if (albumJson != null)
-        //         {
-        //             var albumRoot = JsonSerializer.Deserialize<RootAlbum>(albumJson, options);
-        //             trendingAlbums = albumRoot?.chart_items ?? new List<ChartItemAlbum>();
-        //         }
-        //     }
-        //     catch { }
-
-        //     ViewBag.Username = username;
-
-        //     return View(new MusicViewModel
-        //     {
-        //         Recommendations = recommendations,
-        //         Trending = trending,
-        //         TrendingArtists = trendingArtists,
-        //         TrendingAlbums = trendingAlbums
-        //     });
-        // }
 
 
         [HttpGet]
@@ -418,11 +327,24 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
             return View();
         }
 
-        [HttpGet]
         public IActionResult Playlist()
         {
-            return View();
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            
+            if (userId == null)
+            {
+                // Usuario no autenticado, redirigir a login o mostrar error
+                return RedirectToAction("Login");
+            }
+            
+            // Traer sólo los playlists del usuario con ese Id
+            var playlists = _context.Playlists
+                                    .Where(p => p.UserId == userId.Value)
+                                    .ToList();
+            
+            return View(playlists);
         }
+
 
 
         [HttpGet]
@@ -509,6 +431,9 @@ namespace PRJ_FINAL_MP09_MP03.Controllers
 
 
         
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "2haN7BDAcw6Hc3+bmUU4wiHkDwk/AjMmrX7TYjNxWlk=",
+  "Hash": "+HL/TY2kwyCobumzHmm8WlxYVKPcBDnPg7xALkFJopU=",
   "Source": "PRJ-FINAL MP09-MP03",
   "BasePath": "_content/PRJ-FINAL MP09-MP03",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\login.css"
+    },
+    {
+      "Identity": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\Playlist.css",
+      "SourceId": "PRJ-FINAL MP09-MP03",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\",
+      "BasePath": "_content/PRJ-FINAL MP09-MP03",
+      "RelativePath": "css/Playlist.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\Playlist.css"
     },
     {
       "Identity": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\profile.css",

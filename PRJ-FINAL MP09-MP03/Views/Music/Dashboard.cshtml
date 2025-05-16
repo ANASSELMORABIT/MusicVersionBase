@@ -149,8 +149,32 @@
     
   </div> 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
+
+async function guardarTrackEnPlaylist(datosTrack) {
+
+    console.log("Guardando track en playlist:", datosTrack);
+    const response = await fetch('/Music/GuardarPlaylist', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() // si usas antiforgery token
+        },
+        body: JSON.stringify(datosTrack)
+    });
+
+    if (!response.ok) {
+        throw new Error("Error guardando track en playlist");
+    }
+
+    return await response.json();
+}
+
+
+
 async function getTrackUrlFromApi(trackId) {
     
     const spotifyDataApiUrl = `https://spotify-data.p.rapidapi.com/tracks/?ids=${trackId}`;
@@ -230,6 +254,24 @@ async function getTrackUrlFromApi(trackId) {
         const youtubeResponseMp3 = await fetch(YoutubeMp3Url, youtubeMp3Options);
         const youtubeResultMp3 = await youtubeResponseMp3.json();
         const mp3UrlMp3 = youtubeResultMp3.link;
+
+        const datosTrack = {
+          nombreCancion: title,
+          artista: artists,
+          urlMusica: mp3Url,
+          urlDescarga: mp3UrlMp3,
+          urlImg: imageUrl,
+          idTrack: trackId
+      };
+
+        
+        try {
+            const resultadoGuardado = await guardarTrackEnPlaylist(datosTrack);
+            console.log(resultadoGuardado.message);
+        } catch(error) {
+            console.error("No se pudo guardar el track:", error);
+        }
+
         // Mostrar card con los datos
         document.getElementById("downloadResult").innerHTML = `
             <div class="card mx-auto mt-4 shadow" style="max-width: 700px;">
