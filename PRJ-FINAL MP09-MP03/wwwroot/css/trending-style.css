@@ -21,7 +21,14 @@ html, body {
     user-select: none;
     text-shadow: 1px 1px rgba(0,0,0,0.1);
   }
-  
+  .text-container {
+    animation: fadeInOut 4s ease-in-out infinite;
+}
+
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+    }
   :root {
     --color-bg1: #950923;
     --color-bg2: rgb(0, 17, 82);
@@ -190,111 +197,202 @@ html, body {
     }
   }
 
+
+  .content-container {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+  }
+  
+  /* Para asegurarte de que los gradientes tengan el efecto de 'goo' */
+  .gradients-container {
+    filter: url(#goo) blur(40px);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  /* Asegúrate de que las partículas tengan visibilidad */
+  .g1, .g2, .g3, .g4, .g5, .interactive {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    mix-blend-mode: hard-light;
+    opacity: 0.8;
+    animation: moveInCircle 20s infinite ease;
+  }
+  
+  /* Asegúrate de que tu contenedor de gradientes esté cubriendo toda la pantalla */
+  .gradients-container {
+    filter: url(#goo);
+    z-index: -1;
+  }
+  h1, h2 {
+    color: #ffd700;
+    font-weight: bold;
+    text-shadow: 0 0 5px #ffd700, 0 0 15px #ff0, 0 0 30px #f80;
+    animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+    0% { text-shadow: 0 0 5px #ffd700, 0 0 15px #ff0, 0 0 30px #f80; }
+    100% { text-shadow: 0 0 10px #fff, 0 0 20px #ffd700, 0 0 40px #ff9900; }
+}
+
+
 .container {
     max-width: 1200px;
+    margin: auto;
+    padding-bottom: 60px;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 40px;
-    font-weight: 700;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
-
-.playlist-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    justify-content: center;
-}
-
-.playlist-item {
-    background: #2c2c54;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-    width: 320px;
-    padding: 20px;
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    overflow: hidden;
+    color: #fff;
+    animation: popIn 0.6s ease forwards;
+    transform: scale(0.95);
+    opacity: 0;
+}
+@keyframes popIn {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.container {
+    animation: slideInUp 1s ease-out forwards;
+    transform: translateY(20px);
+    opacity: 0;
 }
 
-.playlist-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.8);
+@keyframes slideInUp {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
-.playlist-item img {
-    border-radius: 12px;
-    width: 100%;
-    height: 180px;
+.card:hover {
+    transform: perspective(1000px) rotateX(3deg) rotateY(-3deg) scale(1.05);
+    box-shadow: 0 0 30px #00ffc8aa, 0 0 50px #00ffd0a2, 0 0 80px #00ffd0;
+}
+
+
+.card img {
     object-fit: cover;
-    margin-bottom: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-    transition: transform 0.4s ease;
+    height: 250px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
-.playlist-item img:hover {
-    transform: scale(1.08);
-}
-
-.playlist-item h3 {
-    margin-bottom: 8px;
-    font-weight: 700;
+.card-body {
+    padding: 20px;
     text-align: center;
 }
 
-.playlist-item p {
-    margin-bottom: 12px;
-    font-size: 0.9rem;
-    text-align: center;
-    color: #c8c8d8;
+.card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #ffcc00;
 }
 
-.btn-download {
-    background: #ff6f61;
-    border: none;
-    width: 100%;
-    padding: 10px;
+.card-text {
+    font-size: 1rem;
+    color: #ccc;
+}
+
+.btn {
+    border-radius: 25px;
+    padding: 8px 20px;
     font-weight: 600;
-    color: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-bottom: 12px;
+    transition: all 0.3s ease;
 }
 
-.btn-download:hover {
-    background: #ff4c3b;
-}
-
-.audio-player {
-    width: 100%;
-    margin-top: 10px;
-    outline: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    cursor: pointer;
-    background-color: #444;
-}
-
-/* Custom play/pause button */
-.play-btn {
-    background: #76c7c0;
+.btn-warning {
+    background-color: #ff9900;
     border: none;
-    padding: 8px 18px;
-    border-radius: 50px;
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 8px;
-    align-self: center;
-    user-select: none;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
 }
 
-.play-btn:hover {
-    background: #4ca6a0;
+.btn-warning:hover {
+    background-color: #ffaa00;
+    transform: scale(1.05);
+}
+
+.btn-primary {
+    background-color: #1e90ff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #1c86ee;
+    transform: scale(1.05);
+}
+
+select.form-select {
+    background-color: #1a1a2e;
+    color: #fff;
+    border: 1px solid #ffd700;
+    border-radius: 10px;
+}
+
+label.form-label {
+    font-weight: bold;
+    color: #ffd700;
+}
+.btn {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    animation: pulseHalo 3s infinite;
+    z-index: 0;
+}
+
+@keyframes pulseHalo {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+}
+
+
+.alert-info {
+    background-color: #202040;
+    border-left: 5px solid #ffd700;
+    color: #ccc;
+}
+.blinking {
+    animation: blinkingText 2s infinite;
+}
+
+@keyframes blinkingText {
+    0% { color: #ffd700; }
+    50% { color: #ffffff; }
+    100% { color: #ffd700; }
 }

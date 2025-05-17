@@ -4,6 +4,85 @@
     var selectedPeriod = Context.Request.Query["timePeriod"].FirstOrDefault() ?? "week";
 }
 
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tendencias Musicales</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- SweetAlert2 CSS y JS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!-- Estilo personalizado -->
+    <link href="~/css/trending-style.css" rel="stylesheet" />
+</head>
+<body>
+
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" asp-controller="Music" asp-action="Dashboard">🎶 MusicApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Playlist">Playlist</a>
+        </li>
+
+        <li class="nav-item"></li>
+          <a class="nav-link" asp-controller="Music" asp-action="Lyrics">Lyrics</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Music" asp-action="TopTracksArtista">Top Tracks</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Account" asp-action="Profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" id="logout-link" class="nav-link text-danger">Sign Out</a>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Fondo y gradientes -->
+  <div class="gradient-bg">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
+    <div class="gradients-container">
+      <div class="g1"></div>
+      <div class="g2"></div>
+      <div class="g3"></div>
+      <div class="g4"></div>
+      <div class="g5"></div>
+      <div class="interactive"></div>
+    </div>
+  </div>
+
 <div class="container mt-4">
     <h1 class="text-center mb-4">Tendencias Musicales</h1>
 
@@ -31,7 +110,7 @@
                         <div class="card-body">
                             <h5 class="card-title">@song.title</h5>
                             <p class="card-text"><strong>Artista:</strong> @song.artist_names</p>
-                            <a href="@song.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
+                             <a asp-controller="Music" asp-action="SongDetails" asp-route-id="@song.id" class="btn btn-primary mt-2">Ver Detalles</a>
                         </div>
                     </div>
                 </div>
@@ -45,33 +124,43 @@
         </div>
     }
 
-    <!-- Artistas en Tendencia -->
     <h2 class="text-center mt-5">🎤 Artistas en Tendencia</h2>
-    @if (Model.TrendingArtists != null && Model.TrendingArtists.Any())
-    {
-        <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
-            @foreach (var item in Model.TrendingArtists)
+    <!-- Artistas en Tendencia -->
+  @if (Model.TrendingArtists != null && Model.TrendingArtists.Any())
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+        @foreach (var item in Model.TrendingArtists)
+        {
+            var artist = item.item;
+
+            // Condición para excluir artistas cuyo nombre contiene "Genius"
+            if (!artist.name.Contains("Genius"))
             {
-                var artist = item.item;
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <img src="@artist.image_url" class="card-img-top" alt="Imagen de @artist.name">
                         <div class="card-body">
                             <h5 class="card-title">@artist.name</h5>
                             <p class="card-text">Popular artista en tendencia</p>
-                            <a href="@artist.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="ArtistDetails" asp-controller="Music" asp-route-id="@artist.id" target="_blank" class="btn btn-primary">
+                                    Ver Detalles
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-info text-center mt-4">
-            No se encontraron artistas en tendencia.
-        </div>
-    }
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center mt-4">
+        No se encontraron artistas en tendencia.
+    </div>
+}
+
 
     <!-- Álbumes en Tendencia -->
     <h2 class="text-center mt-5">📀 Álbumes en Tendencia</h2>
@@ -87,7 +176,12 @@
                         <div class="card-body">
                             <h5 class="card-title">@album.full_title</h5>
                             <p class="card-text"><strong>Artista:</strong> @album.primary_artist_names</p>
-                            <a href="@album.url" target="_blank" class="btn btn-warning">Ver en Genius</a>
+
+
+                            <form asp-action="AlbumDetails" asp-controller="Music" method="get">
+                                <input type="hidden" name="id" value="@album.id" />
+                                <button type="submit" class="btn btn-primary">Ver Detalles</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -100,4 +194,45 @@
             No se encontraron álbumes en tendencia.
         </div>
     }
+
+
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const logoutLink = document.getElementById('logout-link');
+
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You will be signed out from the application.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, sign me out',
+                    background: '#1a1a1a',
+                    color: '#f1f1f1',
+                    customClass: {
+                        popup: 'rounded-4 shadow-lg',
+                        confirmButton: 'btn btn-danger',
+                        cancelButton: 'btn btn-secondary me-3'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Account/Logout';
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/trending-effects.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

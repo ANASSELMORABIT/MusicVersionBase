@@ -43,7 +43,10 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<TodoContext>();
     SeedData.Initialize(scope.ServiceProvider, context);
+    SeedData.InsertLyricsKeys(scope.ServiceProvider, context);
+    SeedData.InsertEscucharKeys(scope.ServiceProvider, context); // <-- esta línea nueva
 }
+
 
 app.MapControllerRoute(
     name: "default",

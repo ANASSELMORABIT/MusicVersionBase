@@ -1,5 +1,8 @@
-@model List<PRJ_FINAL_MP09_MP03.Models.Playlist>
+@model PRJ_FINAL_MP09_MP03.Models.AlbumsDetaille.Album
 
+@{
+    ViewData["Title"] = "Album Details";
+}
 @{
     Layout = null;
 }
@@ -9,16 +12,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Playlist de Usuario</title>
+    <title>Song Details</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css/Playlist.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    
+
+    <!-- Estilo personalizado -->
+    <link href="~/css/AlbumDetail-style.css" rel="stylesheet" />
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" asp-controller="Music" asp-action="Dashboard">🎶 MusicApp</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -29,13 +36,15 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" asp-controller="Music" asp-action="Trending">Trending</a>
+          <a class="nav-link" asp-controller="Music" asp-action="Dashboard">Dashboard</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" asp-controller="Music" asp-action="Playlist">Playlist</a>
         </li>
-
-        <li class="nav-item"></li>
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Trending">Trending</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" asp-controller="Music" asp-action="Lyrics">Lyrics</a>
         </li>
         <li class="nav-item">
@@ -75,30 +84,31 @@
       <div class="interactive"></div>
     </div>
   </div>
-<div class="container py-4">
-    <h2 class="mb-4">Tu Playlist</h2>
 
-    <div class="playlist-container">
-        @foreach (var item in Model)
-        {
-            <div class="playlist-item mb-4" data-trackid="@item.IdTrack">
-                <img src="@item.UrlImg" alt="Imagen canción" class="img-fluid mb-2" style="max-width: 200px;" />
-                <h3>@item.NombreCancion</h3>
-                <p><strong>Artista:</strong> @item.Artista</p>
-                <p>@item.Descripcion</p>
+<div class="album-details-container" style="max-width: 800px; margin: auto; padding: 20px;">
+    <h1>@Model.full_title</h1>
 
-                <button class="btn btn-primary btn-download" onclick="location.href='@item.UrlDescarga'" title="Descargar">
-                    <i class="fas fa-download"></i> Descargar
-                </button>
+    <img src="@Model.cover_art_url" alt="@Model.name" style="width: 100%; border-radius: 10px; margin-bottom: 20px;" />
 
-                @* <audio class="audio-player w-100 mt-3" controls>
-                    <source src="@item.UrlMusica" type="audio/mpeg">
-                    Tu navegador no soporta la reproducción de audio.
-                </audio> *@
-            </div>
-        }
+    <div style="margin-bottom: 20px;">
+        <strong>Release Date:</strong> @Model.release_date_for_display <br />
+        <strong>Artist:</strong> @Model.artist.name <br />
+        <strong>Canciones vistas:</strong> @Model.song_pageviews <br />
+    </div>
+
+    <div>
+        <h3>Description</h3>
+        <div class="description-box">
+            @Html.Raw(Model.description_preview ?? "<p>No description available.</p>")
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <a href="@Model.url" target="_blank" class="btn btn-primary">View on Genius</a>
     </div>
 </div>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const logoutLink = document.getElementById('logout-link');
@@ -131,8 +141,10 @@
         }
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/AlbumDetail-effects.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 </html>

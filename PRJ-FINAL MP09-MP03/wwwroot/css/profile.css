@@ -105,3 +105,12 @@ body {
     0%, 100% { text-shadow: 0 0 10px #00ffd5; }
     50% { text-shadow: 0 0 20px #8a2be2; }
 }
+.modal.fade .modal-dialog {
+    transform: translateY(-50px);
+    transition: transform 0.3s ease-out;
+  }
+  
+  .modal.fade.show .modal-dialog {
+    transform: translateY(0);
+  }
+  

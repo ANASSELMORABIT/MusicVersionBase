@@ -1,9 +1,9 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
+body {
+    background: linear-gradient(135deg, #1e1e2f, #2d2d44);
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 60px;
+}
   
   .text-container {
     z-index: 100;
@@ -21,7 +21,14 @@ html, body {
     user-select: none;
     text-shadow: 1px 1px rgba(0,0,0,0.1);
   }
-  
+  .text-container {
+    animation: fadeInOut 4s ease-in-out infinite;
+}
+
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+    }
   :root {
     --color-bg1: #950923;
     --color-bg2: rgb(0, 17, 82);
@@ -190,111 +197,119 @@ html, body {
     }
   }
 
-.container {
-    max-width: 1200px;
+  .album-details-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    animation: fadeIn 1s ease-in-out;
 }
 
-h2 {
+.album-details-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
     text-align: center;
-    margin-bottom: 40px;
-    font-weight: 700;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    color: #ffd700;
 }
 
-.playlist-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    justify-content: center;
+.album-details-container img {
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
 }
 
-.playlist-item {
-    background: #2c2c54;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-    width: 320px;
-    padding: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.album-details-container img:hover {
+    transform: scale(1.02);
 }
 
-.playlist-item:hover {
+.album-details-container strong {
+    color: #ffcc00;
+}
+
+.album-details-container .btn-primary {
+    background-color: #ff6f61;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.album-details-container .btn-primary:hover {
+    background-color: #ff3b2e;
     transform: scale(1.05);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.8);
 }
 
-.playlist-item img {
-    border-radius: 12px;
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
+.album-details-container h3 {
+    margin-top: 30px;
     margin-bottom: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-    transition: transform 0.4s ease;
-}
-
-.playlist-item img:hover {
-    transform: scale(1.08);
-}
-
-.playlist-item h3 {
-    margin-bottom: 8px;
-    font-weight: 700;
+    color: #a3e4f1;
     text-align: center;
 }
 
-.playlist-item p {
-    margin-bottom: 12px;
-    font-size: 0.9rem;
-    text-align: center;
-    color: #c8c8d8;
+.album-details-container  {
+    border: 1px solid #444;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+.description-box {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.album-details-container img {
+  animation: fadeInUp 1s ease-out;
 }
 
-.btn-download {
-    background: #ff6f61;
-    border: none;
-    width: 100%;
-    padding: 10px;
-    font-weight: 600;
-    color: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-bottom: 12px;
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+@media (max-width: 576px) {
+  .album-details-container {
+      padding: 20px;
+  }
+
+  .album-details-container h1 {
+      font-size: 1.8rem;
+  }
+
+  .description-box {
+      max-height: 150px;
+      font-size: 0.9rem;
+  }
 }
 
-.btn-download:hover {
-    background: #ff4c3b;
+
+/* Imágenes dentro del HTML incrustado */
+.description-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    display: block;
+    margin: 1rem auto;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s ease;
 }
 
-.audio-player {
-    width: 100%;
-    margin-top: 10px;
-    outline: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    cursor: pointer;
-    background-color: #444;
+.description-box img:hover {
+    transform: scale(1.05);
 }
 
-/* Custom play/pause button */
-.play-btn {
-    background: #76c7c0;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 50px;
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 8px;
-    align-self: center;
-    user-select: none;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-}
-
-.play-btn:hover {
-    background: #4ca6a0;
+/* Animación de entrada */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }

@@ -1,0 +1,267 @@
+@model PRJ_FINAL_MP09_MP03.Models.SongDetaille.Song
+
+@{
+    ViewData["Title"] = Model.full_title;
+}
+
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Song Details</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!-- Estilo personalizado -->
+    <link href="~/css/SongDetail-style.css" rel="stylesheet" />
+</head>
+<body>
+
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" asp-controller="Music" asp-action="Dashboard">🎶 MusicApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Music" asp-action="Playlist">Playlist</a>
+        </li>
+        <li class="nav-item"></li>
+          <a class="nav-link" asp-controller="Music" asp-action="Trending">Trending</a>
+        </li>
+        <li class="nav-item"></li>
+          <a class="nav-link" asp-controller="Music" asp-action="Lyrics">Lyrics</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Music" asp-action="TopTracksArtista">Top Tracks</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" asp-controller="Account" asp-action="Profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" id="logout-link" class="nav-link text-danger">Sign Out</a>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Fondo y gradientes -->
+  <div class="gradient-bg">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
+    <div class="gradients-container">
+      <div class="g1"></div>
+      <div class="g2"></div>
+      <div class="g3"></div>
+      <div class="g4"></div>
+      <div class="g5"></div>
+      <div class="interactive"></div>
+    </div>
+  </div>
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="@Model.song_art_image_url" class="card-img-top" alt="@Model.full_title" style="background-color: @Model.song_art_primary_color">
+                <div class="card-body">
+                    <h1 class="card-title">@Model.title</h1>
+                    <h3 class="card-subtitle mb-3 text-muted">@Model.primary_artist_names</h3>
+                    
+                    @if (Model.album != null)
+                    {
+                        <div class="mb-3">
+                            <h5>Álbum</h5>
+                            <p>@Model.album.name</p>
+                            <img src="@Model.album.cover_art_url" class="img-fluid" alt="@Model.album.name" style="max-width: 200px;">
+                        </div>
+                    }
+                    
+                    <div class="mb-3">
+                        <h5>Fecha de lanzamiento</h5>
+                        <p>@Model.release_date_for_display</p>
+                    </div>
+                    
+                    @if (Model.producer_artists != null && Model.producer_artists.Any())
+                    {
+                        <div class="mb-3">
+                            <h5>Productores</h5>
+                            <ul>
+                                @foreach (var producer in Model.producer_artists)
+                                {
+                                    <li>@producer.name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    
+                    @if (Model.writer_artists != null && Model.writer_artists.Any())
+                    {
+                        <div class="mb-3">
+                            <h5>Escritores</h5>
+                            <ul>
+                                @foreach (var writer in Model.writer_artists)
+                                {
+                                    <li>@writer.name</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="@Model.url" class="btn btn-outline-primary" target="_blank">Ver en Genius</a>
+                        @if (!string.IsNullOrEmpty(Model.youtube_url))
+                        {
+                            <a href="@Model.youtube_url" class="btn btn-outline-danger" target="_blank">Ver en YouTube</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información detallada -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Detalles</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Estadísticas</h5>
+                            <ul class="list-group mb-4">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Anotaciones
+                                    <span class="badge bg-primary rounded-pill">@Model.annotation_count</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Contribuidores
+                                    <span class="badge bg-primary rounded-pill">@Model.stats.contributors</span>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(Model.description_preview))
+                    {
+                        <div class="mt-4">
+                            <h5>Descripción</h5>
+                            <div class="p-3 bg-light rounded description-content">
+                                @Html.Raw(Model.description.html)
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (Model.song_relationships != null && Model.song_relationships.Any())
+                    {
+                        <div class="mt-4">
+                            <h5>Relaciones</h5>
+                            <div class="list-group">
+                                @foreach (var rel in Model.song_relationships)
+                                {
+                                    <div class="list-group-item">
+                                        <h6>@rel.relationship_type</h6>
+                                        @if (rel.songs != null)
+                                        {
+                                            <ul>
+                                                @foreach (var song in rel.songs)
+                                                {
+                                                    <li>
+                                                        <a href="@song.url" target="_blank">@song.full_title</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+
+                </div>
+            </div>
+            
+            @if (Model.tags != null && Model.tags.Any())
+            {
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Etiquetas</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var tag in Model.tags)
+                        {
+                            <span class="badge bg-secondary me-1">@tag.name</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/song-detail-effects.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const logoutLink = document.getElementById('logout-link');
+
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You will be signed out from the application.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, sign me out',
+                    background: '#1a1a1a',
+                    color: '#f1f1f1',
+                    customClass: {
+                        popup: 'rounded-4 shadow-lg',
+                        confirmButton: 'btn btn-danger',
+                        cancelButton: 'btn btn-secondary me-3'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Account/Logout';
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

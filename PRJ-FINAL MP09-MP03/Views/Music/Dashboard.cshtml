@@ -16,6 +16,7 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
     <!-- Estilo personalizado -->
     <link href="~/css/dashboard.css" rel="stylesheet" />
@@ -23,7 +24,7 @@
 <body>
 
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" asp-controller="Music" asp-action="Dashboard">🎶 MusicApp</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -35,9 +36,6 @@
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link" asp-controller="Music" asp-action="Trending">Trending</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" asp-controller="Music" asp-action="Recomendaciones">Recomendaciones</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" asp-controller="Music" asp-action="Playlist">Playlist</a>
@@ -55,7 +53,9 @@
           <a class="nav-link" asp-controller="Account" asp-action="Profile">Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">Sign Out</a>
+          @* <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">Sign Out</a> *@
+          <a href="#" id="logout-link" class="nav-link text-danger">Sign Out</a>
+
         </li>
       </ul>
     </div>
@@ -83,7 +83,6 @@
     </div>
   </div>
 
-  <!-- Tu contenido del Dashboard -->
   <div class="content-container">
     <form method="get" asp-controller="Music" asp-action="BuscarTrackId" class="container mt-4 d-flex justify-content-center">
         <input type="text" name="nombreCancion" class="form-control w-50 me-2" placeholder="Buscar canción por nombre..." required />
@@ -130,7 +129,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">@song.title</h5>
                                 <p class="card-text"><strong>Artista:</strong> @song.artist_names</p>
-                                <a href="@song.url" target="_blank" class="btn btn-primary">Ver en Genius</a>
+                                <a asp-controller="Music" asp-action="SongDetails" asp-route-id="@song.id" class="btn btn-primary mt-2">Ver Detalles</a>
                             </div>
                         </div>
                     </div>
@@ -152,6 +151,44 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
+const apiKeys = {
+    spotifyData: [
+        "6f60c5c11cmsh56a91777ad667cep1c3442jsnbfa62e1dcd5e",
+        "c8f7fc78b8mshb37b1e741baa137p1aa1f1jsn13f68c47bb14",
+        "1197a8e516msh581c4bbb853ef52p1eed09jsn9261f00d63d9",
+        "ea35466da5msh6580164a56156ccp1d0b8cjsn591bf4306a17",
+        "50825b5af8msh034a5de1512fd88p1d2a91jsnc71fedc9dcd6"
+    ],
+    spotifyDownloader: [
+        "16f146f39dmshdf344c76a838f13p1586c8jsn47ebb9faa9ae",
+        "389f895960msh342248cef8664f0p12deb1jsnc6d228373c17",
+        "622aa9cf3cmsh8baca60ab3772fap1e44b2jsn5a0086315b7b",
+        "92ee7f73d5mshf2777cb8ac8cbc9p18e50djsna73500eba4db",
+        "79ad7b2a74msh70736922a4bd854p12b7c9jsn99ee9a5dd06a"
+    ],
+    youtubeSearch: [
+        "985945d95bmsh1cf2ec01525844fp17f244jsne3617430077d",
+        "e525d4abe8mshd1a121f09e91ab6p1b9e3bjsn622a99c0229b",
+        "581ddf9e4emshbd157148085c947p113a2ajsn2c7d8ce880d4",
+        "7b3b50560emsh7aca07d26fbf65cp12063cjsn36d929002561",
+        "ee0667fd4emsh677dfbf675d89d8p1737d7jsn119b615adb28"
+    ],
+    youtubeMp3: [
+        "fc85a0f67emsh0f4569f7f282e4ep189ee2jsnca0999129691",
+        "3b6525f58emsh0908a9090bd3d73p15d64ajsn23f9c659fe32",
+        "bfdda54474msh43ade91f18d3bf1p138990jsn6bd89c8c2da7",
+        "076fa91323msh604886f7da08619p1a0f7fjsn056662a3b9d8",
+        "037e937433msh3423ceaccd64e6bp142e90jsn8823a6a74d2c"
+    ]
+};
+
+
+function getRandomKey(service) {
+    const keys = apiKeys[service];
+    return keys[Math.floor(Math.random() * keys.length)];
+}
+
 
 
 async function guardarTrackEnPlaylist(datosTrack) {
@@ -181,11 +218,11 @@ async function getTrackUrlFromApi(trackId) {
     const encodedTrackUrl = encodeURIComponent(`https://open.spotify.com/track/${trackId}`);
     const downloaderApiUrl = `https://spotify-downloader9.p.rapidapi.com/downloadSong?songId=${encodedTrackUrl}`;
 
-
-     const downloaderOptions = {
+    
+    const downloaderOptions = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': '3bef8ac175msh71645f0449bf057p1bcf92jsn54089ed01768', 
+            'x-rapidapi-key': getRandomKey('spotifyDownloader'),
             'x-rapidapi-host': 'spotify-downloader9.p.rapidapi.com'
         }
     };
@@ -193,23 +230,23 @@ async function getTrackUrlFromApi(trackId) {
     const dataOptions = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': '3985f53dc8msh9c15680f95d2864p1b408ajsnc61d1713b36a',
+            'x-rapidapi-key': getRandomKey('spotifyData'),
             'x-rapidapi-host': 'spotify-data.p.rapidapi.com'
         }
     };
 
     const youtubeOptions = {
-            method: 'GET',
-            headers: {
-                'x-rapidapi-key': '07adcad935msh19ddbcd92cb389bp161470jsn227dde574898',
-                'x-rapidapi-host': 'youtube138.p.rapidapi.com'
-            }
+        method: 'GET',
+        headers: {
+            'x-rapidapi-key': getRandomKey('youtubeSearch'),
+            'x-rapidapi-host': 'youtube138.p.rapidapi.com'
+        }
     };
 
     const youtubeMp3Options = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': '1a5b9e653amsh863955825c63f0bp1558c1jsn448f2c926007',
+            'x-rapidapi-key': getRandomKey('youtubeMp3'),
             'x-rapidapi-host': 'youtube-mp36.p.rapidapi.com'
         }
     };
@@ -304,8 +341,41 @@ async function getTrackUrlFromApi(trackId) {
     }
 }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const logoutLink = document.getElementById('logout-link');
 
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function (e) {
+                e.preventDefault();
 
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You will be signed out from the application.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, sign me out',
+                    background: '#1a1a1a',
+                    color: '#f1f1f1',
+                    customClass: {
+                        popup: 'rounded-4 shadow-lg',
+                        confirmButton: 'btn btn-danger',
+                        cancelButton: 'btn btn-secondary me-3'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Account/Logout';
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+<!-- SweetAlert2 CSS y JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>

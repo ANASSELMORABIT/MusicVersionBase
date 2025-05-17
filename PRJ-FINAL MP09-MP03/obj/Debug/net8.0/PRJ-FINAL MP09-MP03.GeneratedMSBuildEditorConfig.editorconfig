@@ -58,6 +58,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/anass/OneDrive/Desktop/DAW-2/C\#/PRJ-FINAL MP09-MP03/Views/Music/AlbumDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVzaWNcQWxidW1EZXRhaWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/anass/OneDrive/Desktop/DAW-2/C\#/PRJ-FINAL MP09-MP03/Views/Music/ArtistDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVzaWNcQXJ0aXN0RGV0YWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/anass/OneDrive/Desktop/DAW-2/C\#/PRJ-FINAL MP09-MP03/Views/Music/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVzaWNcRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -72,6 +80,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/anass/OneDrive/Desktop/DAW-2/C\#/PRJ-FINAL MP09-MP03/Views/Music/Recomendaciones.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVzaWNcUmVjb21lbmRhY2lvbmVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/anass/OneDrive/Desktop/DAW-2/C\#/PRJ-FINAL MP09-MP03/Views/Music/SongDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXVzaWNcU29uZ0RldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/anass/OneDrive/Desktop/DAW-2/C\#/PRJ-FINAL MP09-MP03/Views/Music/TopTracksArtista.cshtml]

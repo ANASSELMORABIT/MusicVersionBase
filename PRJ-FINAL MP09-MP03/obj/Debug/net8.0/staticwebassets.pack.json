@@ -5,8 +5,20 @@
       "PackagePath": "staticwebassets\\PRJ-FINAL MP09-MP03.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\AlbumDetail-style.css",
+      "PackagePath": "staticwebassets\\css\\AlbumDetail-style.css"
+    },
+    {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\ArtistDetail-style.css",
+      "PackagePath": "staticwebassets\\css\\ArtistDetail-style.css"
+    },
+    {
       "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\Playlist.css",
       "PackagePath": "staticwebassets\\css\\Playlist.css"
+    },
+    {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\SongDetail-style.css",
+      "PackagePath": "staticwebassets\\css\\SongDetail-style.css"
     },
     {
       "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\Track.css",
@@ -29,8 +41,16 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\css\\trending-style.css",
+      "PackagePath": "staticwebassets\\css\\trending-style.css"
+    },
+    {
       "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\AlbumDetail-effects.js",
+      "PackagePath": "staticwebassets\\js\\AlbumDetail-effects.js"
     },
     {
       "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\Music.js",
@@ -41,12 +61,24 @@
       "PackagePath": "staticwebassets\\js\\Profile.js"
     },
     {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\artist-detail-effects.js",
+      "PackagePath": "staticwebassets\\js\\artist-detail-effects.js"
+    },
+    {
       "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\particles-config.js",
       "PackagePath": "staticwebassets\\js\\particles-config.js"
     },
     {
       "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\song-detail-effects.js",
+      "PackagePath": "staticwebassets\\js\\song-detail-effects.js"
+    },
+    {
+      "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\js\\trending-effects.js",
+      "PackagePath": "staticwebassets\\js\\trending-effects.js"
     },
     {
       "Id": "C:\\Users\\anass\\OneDrive\\Desktop\\DAW-2\\C#\\PRJ-FINAL MP09-MP03\\wwwroot\\lib\\bootstrap\\LICENSE",
